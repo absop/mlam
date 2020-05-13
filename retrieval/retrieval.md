@@ -1,0 +1,6 @@
+# 使用 model.eval()，调整dropout层的行为，提高正确率
+
+model的eval方法主要是针对某些在train和predict两个阶段会有不同参数的层。比如Dropout层和BN层Dropout在train时随机选择神经元而predict要使用全部神经元并且要乘一个补偿系数BN在train时每个batch做了不同的归一化因此也对应了不同的参数，相应predict时实际用的参数是每个batch下参数的移动平均。torch为了方便大家，设计这个eval方法就是让我们可以不用手动去针对这些层做predict阶段的处理(也可以叫evaluation阶段,所以这个方法名才是eval)这也就是说，如果模型中用了dropout或bn，那么predict时必须使用eval 否则结果是没有参考价值的，不存在选择的余地。
+
+
+输入顺序对模型的特征计算没有影响
